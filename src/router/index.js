@@ -4,11 +4,11 @@
  * @Author: JiaLe
  * @Date: 2021-09-18 10:26:59
  * @LastEditors: went
- * @LastEditTime: 2021-12-30 14:08:09
+ * @LastEditTime: 2022-04-29 16:26:20
  */
 import Vue from "vue";
 import { Modal } from "ant-design-vue"
-import { SYS_TITLE, ENTER_WAY, SYS_TOKEN } from '@/config/global-constant.js'
+import { SYS_TITLE } from '@/config/global-constant.js'
 import VueRouter from "vue-router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css"
@@ -24,7 +24,7 @@ const routes = [
   {
     path: "/",
     name: "index",
-    component: () => import(/* webpackChunkName: "user" */ "../layouts/BasicLayout.vue"),
+    component: () => import(/* webpackChunkName: "user" */ "@/views/Analysis/VueDraggableTest/Index.vue"),
     children: []
   },
   {
@@ -77,34 +77,11 @@ router.beforeEach((to, from, next) => {
   Modal.destroyAll();
   //兼容在ie/360浏览器title异常显示
   document.title = SYS_TITLE
-  let token = sessionStorage.getItem(SYS_TOKEN);
+
   if (to.path !== from.path) {
     NProgress.start();
   }
-  if (to.path === '/login') {
-    // 如果是访问登录界面，如果用户会话信息存在，代表已登录过，跳转到主页
-    if (token) {
-      next({ path: '/' })
-    } else {
-      next()
-    }
-  } else if (to.path === '/init') {
-    next()
-  } else {
-    if (!token || token === 'null') {
-      if (ENTER_WAY === 'portal') {
-        //携带地址栏的token和orgCode跳转到init页面进行初始化
-        let href = window.location.href;
-        let w = href.slice(href.indexOf('?'))
-        next({ path: `/init${w}` })
-      } else {
-        //跳转到登录界面
-        next({ path: '/login' })
-      }
-    } else {
-      next()
-    }
-  }
+  next()
 });
 router.afterEach(() => {
   NProgress.done()

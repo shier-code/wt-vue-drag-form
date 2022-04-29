@@ -4,7 +4,7 @@
  * @Author: went
  * @Date: 2021-12-01 14:32:01
  * @LastEditors: went
- * @LastEditTime: 2022-02-25 10:43:53
+ * @LastEditTime: 2022-04-29 16:15:29
 -->
 # vue-base-template-v2.0说明文档
 
@@ -61,9 +61,8 @@ npm run build
 //系统title
 export const SYS_TITLE = "vue-base-template-v2.0"
 
-//针对教务的业务需求，系统提供登录页面和门户跳转两种方式进入系统
-//portal:门户跳转  login:系统单独的登录
-export const ENTER_WAY = "portal"
+//login:系统单独的登录
+export const ENTER_WAY = "login"
 
 //配置token和orgCode全局常量
 export const SYS_TOKEN = "token"
