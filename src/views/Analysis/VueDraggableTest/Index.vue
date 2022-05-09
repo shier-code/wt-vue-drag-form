@@ -4,7 +4,7 @@
  * @Author: went
  * @Date: 2022-04-25 09:39:45
  * @LastEditors: went
- * @LastEditTime: 2022-04-29 15:42:07
+ * @LastEditTime: 2022-05-09 14:36:40
 -->
 <template>
   <div class="">
@@ -47,15 +47,42 @@
           @end="onEnd"
           @change="onChange"
         >
+          <a-radio-group
+            v-model="showType"
+            style="margin-bottom: 16px"
+          >
+            <a-radio-button value="app">
+              手机
+            </a-radio-button>
+            <a-radio-button value="web">
+              电脑
+            </a-radio-button>
+          </a-radio-group>
           <transition-group>
-            <div
-              class="item"
-              v-for="(item,index) in formList"
-              :key="index"
-              @click.capture="selectCpn(item)"
-            >
-              <form-cpn :formItem="item"></form-cpn>
-            </div>
+            ccc
+            <template v-if="showType==='app'">
+              <div
+                class="item"
+                v-for="(item,index) in formList"
+                :key="index"
+                @click.capture="selectCpn(item)"
+              >
+                <form-app :formItem="item">
+                </form-app>
+              </div>
+            </template>
+            <template v-else>
+              <div
+                class="item"
+                v-for="(item,index) in formList"
+                :key="index"
+                @click.capture="selectCpn(item)"
+              >
+                <form-web :formItem="item">
+                </form-web>
+              </div>
+            </template>
+
           </transition-group>
         </draggable>
       </div>
@@ -72,7 +99,6 @@
             ></component>
           </div>
         </template>
-
       </div>
     </div>
   </div>
@@ -80,9 +106,11 @@
  
 <script>
 import draggable from 'vuedraggable'
-import FormCpn from './cpns/FormCpn'
-import InputCpn from './cpns/Input'
-import SelectCpn from './cpns/Select'
+
+import FormWeb from './cpns/FormWeb'
+import FormApp from './cpns/FormApp'
+import InputCpn from './cpns/FormConfig/Input'
+import SelectCpn from './cpns/FormConfig/Select'
 import optionWidget from './config/optionWidget'
 import defaultForm from './config/defaultForm'
 import { mapState, mapActions } from 'vuex'
@@ -91,7 +119,10 @@ export default {
   name: '',
   components: {
     draggable,
-    FormCpn,
+
+    FormWeb,
+    FormApp,
+
     InputCpn,
     SelectCpn
   },
@@ -108,7 +139,8 @@ export default {
       curCpn: null,
       curCpnType: "",
       curCpnId: "",
-      tenpList: null
+      tenpList: null,
+      showType: 'app'
     }
   },
   computed: {
