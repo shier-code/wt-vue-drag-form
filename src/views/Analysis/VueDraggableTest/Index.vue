@@ -4,38 +4,50 @@
  * @Author: went
  * @Date: 2022-04-25 09:39:45
  * @LastEditors: went
- * @LastEditTime: 2022-05-09 14:36:40
+ * @LastEditTime: 2022-05-10 16:33:33
 -->
 <template>
-  <div class="">
-    <h2>两列拖动</h2>
-    <!--使用draggable组件-->
-    <div class="itxst">
-      <div class="col-left">
-        <div class="title">国内网站</div>
-        <draggable
-          v-model="optionWidget"
-          group="site"
-          animation="300"
-          dragClass="dragClass"
-          ghostClass="ghostClass"
-          chosenClass="chosenClass"
-          :allbackOnBody='true'
-          @start="onStart"
-          @end="onEnd"
+
+  <!--使用draggable组件-->
+  <div class="wt-drag-form">
+    <div class="col-left">
+      <div class="title">控件</div>
+      <draggable
+        v-model="optionWidget"
+        group="site"
+        animation="300"
+        dragClass="dragClass"
+        ghostClass="ghostClass"
+        chosenClass="chosenClass"
+        :allbackOnBody='true'
+        @start="onStart"
+        @end="onEnd"
+      >
+        <transition-group>
+          <div
+            class="item"
+            v-for="(item) in optionWidget"
+            :data-uid="item.id"
+            :key="item.id"
+          >{{item.title}}</div>
+        </transition-group>
+      </draggable>
+    </div>
+    <div class="col-center">
+      <div class="wt-radio-btn">
+        <a-radio-group
+          v-model="showType"
+          style="margin-bottom: 16px"
         >
-          <transition-group>
-            <div
-              class="item"
-              v-for="(item) in optionWidget"
-              :data-uid="item.id"
-              :key="item.id"
-            >{{item.title}}</div>
-          </transition-group>
-        </draggable>
+          <a-radio-button value="app">
+            手机
+          </a-radio-button>
+          <a-radio-button value="web">
+            电脑
+          </a-radio-button>
+        </a-radio-group>
       </div>
-      <div class="col-center">
-        <div class="title">你可以把左边的元素拖到右边</div>
+      <div class="wt-center-area">
         <draggable
           v-model="defaultForm"
           group="site"
@@ -47,19 +59,8 @@
           @end="onEnd"
           @change="onChange"
         >
-          <a-radio-group
-            v-model="showType"
-            style="margin-bottom: 16px"
-          >
-            <a-radio-button value="app">
-              手机
-            </a-radio-button>
-            <a-radio-button value="web">
-              电脑
-            </a-radio-button>
-          </a-radio-group>
+
           <transition-group>
-            ccc
             <template v-if="showType==='app'">
               <div
                 class="item"
@@ -73,7 +74,7 @@
             </template>
             <template v-else>
               <div
-                class="item"
+                class="wt-center-web-item"
                 v-for="(item,index) in formList"
                 :key="index"
                 @click.capture="selectCpn(item)"
@@ -86,20 +87,21 @@
           </transition-group>
         </draggable>
       </div>
-      <div class="col-right">
-        <template v-if="formList.length">
-          <div
-            v-for="item in formList"
-            :key="item.id"
-          >
-            <component
-              v-if="item.type===curCpnType&&item.id===curCpnId"
-              :is="item.type"
-              :propsData="curCpn"
-            ></component>
-          </div>
-        </template>
-      </div>
+
+    </div>
+    <div class="col-right">
+      <template v-if="formList.length">
+        <div
+          v-for="item in formList"
+          :key="item.id"
+        >
+          <component
+            v-if="item.type===curCpnType&&item.id===curCpnId"
+            :is="item.type"
+            :propsData="curCpn"
+          ></component>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -113,6 +115,7 @@ import InputCpn from './cpns/FormConfig/Input'
 import SelectCpn from './cpns/FormConfig/Select'
 import optionWidget from './config/optionWidget'
 import defaultForm from './config/defaultForm'
+
 import { mapState, mapActions } from 'vuex'
 import common from '@/utils/common'
 export default {
@@ -152,6 +155,8 @@ export default {
   methods: {
     ...mapActions('dragForm', ['setFormList']),
     onChange(evt) {
+      console.log('---------', evt.added.newIndex);
+
       let newFormList = JSON.parse(JSON.stringify(this.formList))
       let formItem = evt.added.elememt
       if (evt.added) {
@@ -187,11 +192,11 @@ export default {
 <style scoped lang = "less">
 /*定义要拖拽元素的样式*/
 .ghostClass {
-  background-color: blue !important;
+  background-color: #8e8e8e !important;
 }
 
 .chosenClass {
-  background-color: red !important;
+  /* background-color: red !important; */
   opacity: 1 !important;
 }
 
@@ -203,33 +208,45 @@ export default {
   background-image: none !important;
 }
 
-.itxst {
-  margin: 10px;
+.wt-drag-form {
   display: flex;
+  height: 100%;
 }
 
-.title {
-  padding: 6px 12px;
-}
 .col-left {
-  width: 20%;
-  flex: 1;
-  padding: 10px;
-  border: solid 1px #eee;
-  border-radius: 5px;
-  float: left;
+  height: 100%;
+  width: 304px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  .title {
+    height: 48px;
+    line-height: 48px;
+    padding-left: 24px;
+    font-size: 16px;
+    color: #303233;
+    border-bottom: 1px solid #e1e3e5;
+  }
 }
 .col-center {
-  width: 40%;
   flex: 1;
-  padding: 10px;
-  border: solid 1px #eee;
-  border-radius: 5px;
-  float: left;
+  height: 100%;
+  background: #f2f5f7;
+
+  .wt-radio-btn {
+    height: 72px;
+    line-height: 72px;
+    text-align: center;
+  }
+  .wt-center-area {
+    background: #ffffff;
+    height: calc(100% - 72px);
+    margin: 0 24px 24px;
+    padding: 0 24px;
+    .wt-center-web-item {
+    }
+  }
 }
 .col-right {
-  width: 30%;
-  flex: 1;
+  width: 360px;
 }
 .col + .col {
   margin-left: 10px;

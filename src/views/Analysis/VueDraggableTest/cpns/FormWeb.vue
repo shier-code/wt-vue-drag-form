@@ -4,30 +4,27 @@
  * @Author: went
  * @Date: 2022-04-25 11:16:31
  * @LastEditors: went
- * @LastEditTime: 2022-04-29 16:04:09
+ * @LastEditTime: 2022-05-10 15:54:12
 -->
 <template>
-  <div class="">
-    <div v-if="formItem.type==='InputCpn'">
-      <label
-        v-if="formItem.options"
-        for=""
-      >{{formItem.options.label}}</label>
-      <a-input :placeholder="formItem.options.placeholder" />
-    </div>
-    <div v-if="formItem.type==='SelectCpn'">
-      <label for="">{{formItem.options.label}}</label>
-      <a-select style="width: 120px">
-      </a-select>
-    </div>
-
+  <div class="wt-form-web">
+    <a-form-model
+      :label-col="labelCol"
+      :wrapper-col="wrapperCol"
+    >
+      <component
+        :is="formItem.type"
+        :propsData="formItem"
+      ></component>
+    </a-form-model>
   </div>
 </template>
- 
-<script>
+ <script>
+import InputCpn from './FormCtrl/InputCtrl'
+import SelectCpn from './FormCtrl/SelectCtrl'
 export default {
   name: '',
-  components: {},
+  components: { InputCpn, SelectCpn },
   props: {
     formItem: {
       type: Object
@@ -36,7 +33,8 @@ export default {
 
   data() {
     return {
-
+      labelCol: { span: 8 },
+      wrapperCol: { span: 10 }
     }
   },
   computed: {

@@ -4,7 +4,7 @@
  * @Author: went
  * @Date: 2022-04-27 15:14:37
  * @LastEditors: went
- * @LastEditTime: 2022-04-29 15:55:51
+ * @LastEditTime: 2022-05-10 15:53:01
  */
 export default [
   {
@@ -27,7 +27,7 @@ export default [
     icon: 'danxuankuang',
     value: '',
     options: {
-      label: '单',
+      label: '单选',
       width: '100%',
       required: false,
       disabled: false,
